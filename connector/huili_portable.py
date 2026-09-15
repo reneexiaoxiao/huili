@@ -25,7 +25,7 @@ import urllib.parse
 import urllib.request
 from typing import Any
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 ROOT = pathlib.Path(__file__).resolve().parent
 PROVIDERS = ("codex", "qwenwork", "doubao", "other")
 READ_SCOPES = (

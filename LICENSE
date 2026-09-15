@@ -1,21 +1,104 @@
-MIT License
+会里个人与内部使用许可 1.0
+Huili Personal and Internal Use License 1.0
 
-Copyright (c) 2026 Huili contributors
+Copyright (c) 2026 reneexiaoxiao and Huili contributors.
+原项目：https://github.com/reneexiaoxiao/huili
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+本许可是自定义的源码可用许可，不是 MIT 许可或 OSI 批准的开源许可。
+本中文文本为本许可的正式文本。请同时注意第七条关于旧版本、第三方
+材料、平台权利和法定权利的说明。
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+一、适用范围
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+“许可方”指对相应材料拥有权利并以本许可提供授权的权利人。
+“材料”指明确以本许可提供的会里项目自有代码、Skill、文档、模板和
+素材，以及对这些材料的修改或衍生部分；不包括适用其他许可的内容。
+“组织内部使用”指本人或所属组织用于自己的工作和内部运营，由员工
+或仅为该内部目的受托、承担保密义务的人员访问和操作，不包括将会里
+的功能、源码或衍生项目提供给客户或公众。
+
+本许可随 v0.2.0 首次发布，适用于按本许可提供的材料。版本号变化不
+会撤销材料此前已经授予的权利，也不会使第七条列明的例外失效。
+
+二、免费自用与修改
+
+在遵守本许可的前提下，许可方免费、非独占地允许你下载、阅读、复制、
+安装、运行、研究、修改材料，并制作衍生版本，仅用于：
+1. 你自己的个人使用，包括学习、试验和日常工作；
+2. 你所属组织的内部业务使用，包括商业组织内部提效。
+
+上述使用不需要逐次申请许可。你可以让自己的 Agent 或受托计算、存储
+服务在完成上述使用所需的范围内处理材料，不因此授权服务提供者将其
+独立分发、出售或另行开发成对外服务。
+
+正常使用会里产生的会议纪要、研究报告等工作成果，不因使用了本工具
+就成为受本许可限制的软件衍生版本；成果中复制的受许可代码、模板或
+素材本身仍须按相应许可处理。
+
+三、禁止未经授权的对外分享
+
+除第二条的受托处理和第七条所列独立权利外，未经许可方另行书面授权，
+不得向本人及所属组织以外的第三方分发、发布、上传、转发、提供下载
+或以其他方式公开
+提供材料或修改版，包括源码、安装包、Skill 包、前端、项目文档及其
+实质性复制品。无偿、注明来源或作过修改，均不自动取得对外分享权。
+
+本条不禁止分享原项目链接，也不限制依法可以进行的评论和必要引用。
+读者可从原项目自行取得材料，并在其适用许可下自用。
+
+四、禁止未经授权的销售、服务与项目宣传
+
+未经许可方另行书面授权，不得售卖、转售、许可给第三方、白标交付或
+将材料及修改版整合到对外分发的产品中；不得将会里或其衍生功能向
+第三方提供为托管服务、软件服务、付费部署包或其他商业交付。
+服务免费或处于免费试用期，不构成对外提供会里功能的许可。
+
+不得将材料或修改版包装为自己的项目或产品向外发布、招揽客户、销售
+或推广。不得将原作部分宣称为自己的独立原创，也不得虚构许可方参与、
+认可、担保或背书。你可如实说明自己的独立新增贡献，但这不授予对外
+分享或推广项目的权利。
+
+支付通用 Agent、云计算或存储费用以完成第二条中的内部使用，不因
+付费本身就构成转售会里。
+
+五、版权与来源保留
+
+保留材料中的许可证、版权声明、NOTICE 及原项目来源信息，不得删除
+或隐去第三方应保留的声明。内部修改时可以另加修改者和修改说明，
+不得抹去原作归属。本许可不转让著作权，也不授予许可方的姓名、头像、
+商标或标识用于你的产品命名、广告或背书的权利。
+
+六、单独授权
+
+超过第二条范围的分享、销售、托管、交付或宣传，须事先取得相应权利
+人的明确书面授权。可通过原仓库列明的维护者联系授权事宜。提交请求、
+保留署名或未收到答复，均不视为已经获得授权。
+
+七、既有授权、第三方与法定权利
+
+1. 已经按 MIT 等其他许可合法取得的材料，其既有授权不因本许可而被
+   追溯撤销或附加限制。v0.1.0 的历史 MIT 文本保留在
+   LICENSES/huili-v0.1.0-MIT.txt；该历史文件不为本许可下首次发布的
+   新材料另行授予 MIT 权利。旧版可合法再分发的权利也不被本许可抹去。
+2. 第三方依赖和已有第三方代码继续适用各自许可，见
+   THIRD_PARTY_NOTICES.md。本许可不限制你独立行使这些权利。
+3. 对于许可方通过 GitHub 公共仓库授予的平台必要权利，本许可不限制
+   GitHub 服务条款规定的站内查看、展示、使用和 fork 等权利。此例外
+   不额外授权站外分发、售卖或冒充原创。
+4. 本许可不限制法律直接允许的行为，不主张对思想、方法、事实或独立
+   实现的排他权利，也不免除你对自己数据和第三方内容承担的义务。
+
+八、违约与终止
+
+超出本许可范围的行为未获本许可授权。违反本许可时，本许可所授予的
+权利终止；应停止越权使用、分发和服务。恢复被终止的授权须取得许可方
+书面同意。本条不撤销第七条列明的独立权利，也不影响依法享有的救济。
+
+九、无保证与责任限制
+
+在适用法律允许的范围内，材料按现状提供，不对适销性、特定用途适用性、
+准确性、持续可用性或不侵权作任何明示或默示保证。许可方不对因材料或
+本许可产生的损害承担责任，但法律不允许排除或限制的责任除外。
+
+未明确授予的权利由相应权利人保留。个别条款无效不影响其余可独立
+执行的条款；本许可不强制指定争议解决地点或排除依法享有的权利。

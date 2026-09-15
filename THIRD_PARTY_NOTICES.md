@@ -1,6 +1,8 @@
 # Third-party notices
 
-Project-owned source and documents are MIT. Referenced npm dependencies are installed from the public registry; they are not vendored as proprietary platform packages. Their own licenses remain applicable.
+Project-owned materials offered with this release are governed by the custom Huili Personal and Internal Use License 1.0 in `LICENSE`, subject to its prior-license and third-party exceptions. The v0.1.0 MIT grant is preserved in `LICENSES/huili-v0.1.0-MIT.txt`; it is historical and does not grant MIT rights to new materials first released only under the current license. Previously granted rights in older materials remain unaffected.
+
+Referenced npm dependencies are installed from the public registry; they are not vendored as proprietary platform packages. Their own licenses remain applicable and are not replaced by the project license.
 
 | Dependency | Version | Declared license |
 | --- | --- | --- |
