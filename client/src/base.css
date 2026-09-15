@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@theme inline {
+ --color-background: #fffdf9; --color-foreground: #2d201c;
+ --color-primary: #a13b30; --color-primary-foreground: #fffdf9;
+ --color-secondary: #f5f0e8; --color-secondary-foreground: #544843;
+ --color-muted: #eee7dd; --color-muted-foreground: #746760;
+ --color-accent: #f5e5df; --color-accent-foreground: #7d3028;
+ --color-destructive: #b83131; --color-destructive-foreground: #fff;
+ --color-border: #ded2c4; --color-input: #ded2c4; --color-ring: #a13b30;
+ --color-card: #fffdf9; --color-card-foreground: #2d201c;
+ --color-popover: #fffdf9; --color-popover-foreground: #2d201c;
+ --color-warning: #a36631; --color-warning-foreground: #fff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; background:#f5f0e8; color:#2d201c; }
+button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; } button:disabled { cursor:not-allowed; }
+.sample-notice { padding:8px 18px; background:#7b312b; color:#fff5eb; font-size:12px; text-align:center; }

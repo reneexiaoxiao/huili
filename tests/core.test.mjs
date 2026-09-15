@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {attentionItems,filteredAttention,ownerLabel} from '../client/src/features/huili/project-attention.ts';
+import {calendarEventsForDay,hiddenCalendarEventCount} from '../client/src/features/huili/calendar.ts';
+const now=Date.parse('2026-09-15T12:00:00Z');
+const item={owner:'self',ownerName:'',priority:'P1',blocked:true,text:'确认示例范围',reason:'示例',assignmentQuote:'我来确认',sourceIds:['e']};
+const project=(time,values=[item])=>({id:'sample',name:'sample',evidence:[{id:'e',time}],attention:{state:'open',items:values}});
+test('stale responsibility becomes unconfirmed instead of retaining an urgent blocker',()=>{const [i]=attentionItems(project('2026-08-01T12:00:00Z'),now);assert.equal(i.owner,'unknown');assert.equal(i.priority,'P3');assert.equal(i.blocked,false);});
+test('missing evidence is not treated as confirmed responsibility',()=>{const p=project('2026-09-15T10:00:00Z');p.evidence=[];assert.equal(attentionItems(p,now)[0].owner,'unknown');});
+test('waiting on another person is distinct from waiting on me',()=>{const p=project('2026-09-15T10:00:00Z',[item,{...item,owner:'other',ownerName:'示例协作方'}]);assert.equal(filteredAttention(p,'mine',now).length,1);assert.equal(ownerLabel(filteredAttention(p,'others',now)[0]),'等示例协作方');});
+test('calendar overflow remains reachable and source order is unchanged',()=>{const es=[4,3,2,1].map(h=>({title:String(h),startedAt:`2026-09-15T0${h}:00:00Z`}));const result=calendarEventsForDay(new Map([['day',es]]),'day');assert.equal(result.length,4);assert.equal(result[0].title,'1');assert.equal(es[0].title,'4');assert.equal(hiddenCalendarEventCount(result),1);assert.equal(hiddenCalendarEventCount([]),0);});

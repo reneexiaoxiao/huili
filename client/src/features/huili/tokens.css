@@ -1,0 +1,18 @@
+.meeting-hub-shell {
+  --huili-bg: #f5f0e8;
+  --huili-surface: rgba(255, 253, 249, 0.93);
+  --huili-surface-strong: #fffdf9;
+  --huili-ink: #2d201c;
+  --huili-ink-soft: #544843;
+  --huili-muted: #82746d;
+  --huili-line: rgba(104, 82, 68, 0.17);
+  --huili-line-strong: rgba(104, 82, 68, 0.28);
+  --huili-accent: #a13b30;
+  --huili-accent-soft: #f5e5df;
+  --huili-orange: #c8793f;
+  --huili-blue: #627d91;
+  --huili-green: #667e65;
+  --huili-purple: #766d91;
+  --huili-serif: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+  --huili-paper-texture: none;
+}
