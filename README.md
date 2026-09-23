@@ -8,7 +8,7 @@
 
 当前接手协议说明 Agent 如何生成个人前端；仓库本身尚未提供跨宿主的自动生成、部署或登录服务。
 
-[项目海报](docs/images/huili-poster.png) · [首次生成个人会里](references/first-run.md) · [交给 Agent 接手](docs/TAKEOVER.md) · [Skill 入口](SKILL.md) · [能力与边界](docs/CAPABILITIES.md) · [接入契约](docs/ADAPTER.md) · [隐私说明](docs/PRIVACY.md) · [使用许可](docs/LICENSE-FAQ.md)
+[项目海报](docs/images/huili-poster.png) · [首次生成个人会里](references/first-run.md) · [可选视觉定制](references/visual-customization.md) · [交给 Agent 接手](docs/TAKEOVER.md) · [Skill 入口](SKILL.md) · [能力与边界](docs/CAPABILITIES.md) · [接入契约](docs/ADAPTER.md) · [隐私说明](docs/PRIVACY.md) · [使用许可](docs/LICENSE-FAQ.md)
 
 ![会里前端参考，全部为虚构示例](docs/images/projects-preview.png)
 
@@ -31,6 +31,7 @@
 “首屏先看什么、纪要怎样好用、会里能主动到什么程度”这三个轻问题。
 如果我愿意深入聊，再追加采访。以原前端为参考，在我自己的目录
 生成并预览一个能用的会里；说明哪些来自资料、哪些是我的选择。
+默认沿用原来的视觉；如果我给出参考页面或审美偏好，再按我的选择调整。
 先验收一场会议的读取、行动确认和真实产物回读，再逐步扩展。
 缺失条件明确标记，别擅自扫描全部历史、开启后台任务或发消息。
 ```
