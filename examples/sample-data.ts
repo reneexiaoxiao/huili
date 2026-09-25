@@ -1,6 +1,7 @@
-import type { MeetingRecord, MeetingActionInboxItem, MeetingSeriesSnapshot } from '../shared/api.interface';
+import type { DailyBlankDisposition, DailyBlankFeedback, MeetingRecord, MeetingActionInboxItem, MeetingSeriesSnapshot } from '../shared/api.interface';
 import type { ProjectCatalog, ProjectRecord } from '../shared/project.interface';
 import type { BackendRequest } from '../client/src/lib/transport';
+import { sampleDailyBlank, sampleDailyBlankDrawer } from './sample-daily-blank';
 const at = (offset: number, hour = 10) => { const d=new Date(); d.setDate(d.getDate()+offset);d.setHours(hour,0,0,0);return d.toISOString(); };
 const concepts = ['社区图书角', '开放日筹备', '公共花园'];
 export const sampleMeetings: MeetingRecord[] = concepts.flatMap((title,p) => [-6,-2].map((day,i)=>({
@@ -17,19 +18,55 @@ export const sampleCatalog: ProjectCatalog = {version:1,indexedAt:at(0),policy:{
  attention:{checkedAt:at(0),state:i===2?'uncertain':'open',items:[{owner:i===0?'self':i===1?'other':'unknown',ownerName:i===1?'协作方':'',priority:i===0?'P1':'P2',blocked:i===0,text:['决定首批开放 20 本还是 40 本','等待场地安排回复','核对下一步负责人'][i],reason:['在 Agent 对话里提出过，尚未见后续决定；数量会影响书架和登记方式。','场地确定后再安排物料。','现有记录没有明确负责人。'][i],assignmentQuote:['首批开放 20 本还是 40 本？请你决定。','等协作方确认场地。',''][i],sourceIds:[i===0?'sample-chat-decision':`sample-evidence-${i}`]}]},
  digest:{headline:['先让第一批书流动起来','场地回复后，继续安排','下一步的责任还待核对'][i],stage:'试行准备',summary:'当前仅展示虚构项目的工作结构。',facts:[{text:'已完成两次讨论，形成了初步范围。',sourceIds:[`sample-evidence-${i}`]}],nextSteps:[],waiting:[],changes:[],deliverables:[]},
 }))};
-export const sampleSnapshot: MeetingSeriesSnapshot = {status:'ready',generation:1,meetingCount:7,lastSuccessfulAt:at(0),dailyBlankDrawer:[],candidates:concepts.map((label,i)=>({id:`sample-series-${i}`,label,themeCluster:'一起做点小事',meetingExternalKeys:[`sample:${i}:0`,`sample:${i}:1`],strength:0.8,confidence:0.8,matchReasons:['同一虚构项目的连续讨论'],conflictSignals:[],currentProgress:'试行准备中',nextConclusion:'核对下一步需要谁的决定'}))};
+export const sampleSnapshot: MeetingSeriesSnapshot = {status:'ready',generation:1,meetingCount:7,lastSuccessfulAt:at(0),dailyBlank:sampleDailyBlank,dailyBlankDrawer:sampleDailyBlankDrawer,candidates:concepts.map((label,i)=>({id:`sample-series-${i}`,label,themeCluster:'一起做点小事',meetingExternalKeys:[`sample:${i}:0`,`sample:${i}:1`],strength:0.8,confidence:0.8,matchReasons:['同一虚构项目的连续讨论'],conflictSignals:[],currentProgress:'试行准备中',nextConclusion:'核对下一步需要谁的决定'}))};
 const notes: MeetingActionInboxItem[]=[];
 const ids=new Map<string,string>();
+let sampleDrawCount = 0;
+function drawPresetBlank(blankId: string, saveTags?: string[]) {
+ const current = sampleSnapshot.dailyBlank;
+ const drawer = sampleSnapshot.dailyBlankDrawer;
+ if (!current || current.id !== blankId || drawer.length === 0) throw new Error('没有可展示的下一件虚构留白。');
+ if (saveTags) drawer.push({...current, tags:saveTags, savedAt:new Date().toISOString()});
+ const next = drawer.shift()!;
+ const drawRequest = {id:`sample-draw-${++sampleDrawCount}`,sourceBlankId:blankId,state:'pending' as const,requestedAt:new Date().toISOString()};
+ sampleSnapshot.dailyBlank = undefined;
+ sampleSnapshot.dailyBlankDrawRequest = drawRequest;
+ globalThis.setTimeout(() => {
+  sampleSnapshot.dailyBlank = {...next, discardedAt:undefined, date:new Date(Date.now()+8*60*60*1000).toISOString().slice(0,10)};
+  sampleSnapshot.dailyBlankDrawRequest = undefined;
+ }, 450);
+ return {drawer:structuredClone(drawer),drawRequest};
+}
 export async function sampleRequest(options:BackendRequest):Promise<unknown> {
  const u=options.url; const method=options.method||'GET';
  if(method==='GET') {
   if(u==='/api/hub/projects') return structuredClone(sampleCatalog);
   if(u==='/api/hub/overview') return {meetings:sampleMeetings,counts:{meetings:7,awaitingConfirmation:0,inProgress:0,done:0,upcoming:1},agent:{paired:false}};
-  if(u==='/api/hub/series') return {snapshot:sampleSnapshot,meetings:sampleMeetings};
+  if(u==='/api/hub/series') return {snapshot:structuredClone(sampleSnapshot),meetings:sampleMeetings};
   if(u==='/api/hub/actions') return {actions:structuredClone(notes),counts:{myTodos:notes.filter(n=>n.status!=='done').length,awaitingConfirmation:0,aiInProgress:0,completed:notes.filter(n=>n.status==='done').length}};
   if(u.includes('ignored')) return {meetings:[]};
  }
  const body=options.data as Record<string,string>|undefined;
+ const blankAction=u.match(/^\/api\/hub\/daily-blank\/([^/]+)\/(feedback|disposition|save-and-redraw)$/);
+ if(blankAction) {
+  const blankId=decodeURIComponent(blankAction[1]);
+  const current=sampleSnapshot.dailyBlank;
+  if(!current || current.id!==blankId) throw new Error('这件示例已切换，请刷新页面。');
+  if(blankAction[2]==='feedback' && method==='PATCH') {
+   current.feedback=(options.data as {feedback:DailyBlankFeedback}).feedback;
+   return {dailyBlank:structuredClone(current)};
+  }
+  if(blankAction[2]==='disposition' && method==='PATCH') {
+   const action=(options.data as {action:DailyBlankDisposition}).action;
+   if(action==='discard_and_redraw') return drawPresetBlank(blankId);
+   if(action==='discard') current.discardedAt=new Date().toISOString();
+   if(action==='restore') current.discardedAt=undefined;
+   return {dailyBlank:structuredClone(current),drawer:structuredClone(sampleSnapshot.dailyBlankDrawer)};
+  }
+  if(blankAction[2]==='save-and-redraw' && method==='POST') {
+   return drawPresetBlank(blankId,(options.data as {tags:string[]}).tags);
+  }
+ }
  if(u==='/api/hub/captures' && method==='POST' && body?.mode==='record') {
   const prior=ids.get(body.clientRequestId);if(prior)return {actionId:prior,status:'planned'};
   const id='capture:'+crypto.randomUUID();ids.set(body.clientRequestId,id);

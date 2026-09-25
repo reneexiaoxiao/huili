@@ -559,6 +559,15 @@ export function DailyBlank({
                 </button>
                 {expanded && (
                   <div className="daily-blank-drawer-card-detail">
+                    {card.canvas && (
+                      <iframe
+                        className="daily-blank-drawer-canvas"
+                        loading="lazy"
+                        sandbox=""
+                        srcDoc={canvasDocument(card.canvas.markup)}
+                        title={card.canvas.ariaLabel}
+                      />
+                    )}
                     {card.visual && (
                       <img
                         alt={card.visual.alt}
