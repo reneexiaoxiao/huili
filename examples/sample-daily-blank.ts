@@ -7,26 +7,21 @@ const today = (daysAgo = 0) => {
 const generatedAt = new Date().toISOString();
 const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-// These are newly written fictional examples. The titles and varied forms echo
-// the author's saved pieces; no personal source text or meeting data is copied.
+// The two PNG artworks come from the author's personal version, with metadata
+// removed. All surrounding text and meeting evidence are fictional demo copy.
 export const sampleDailyBlank: DailyBlankSnapshot = {
-  id: 'sample-blank-period',
+  id: 'sample-blank-sweets',
   date: today(),
   state: 'artifact',
-  title: '句点暂留',
-  content: '改到最后，句点先落在纸上。下一次打开，还可以从这里接着写。',
-  whyNow: '虚构的开放日筹备讨论已经有了可试行的版本，仍保留后续修改空间。',
-  conversationStarter: '沿着“句点暂留”继续聊：哪些事可以先交付一版，哪些决定还要留待核对？请只使用演示资料。',
+  title: '甜有三种走法',
+  content: '同一种甜，可以慢慢流下、凝成颗粒，也可以拉出一根细线。',
+  whyNow: '虚构的社区市集讨论了同一主题的不同呈现方式，这件留白把它变成一幅静物。',
+  conversationStarter: '沿着“甜有三种走法”继续聊：同一主题还可以有哪些呈现方式？请只使用演示资料。',
   contractVersion: '2026-09-10.open-media',
-  canvas: {
-    type: 'html', source: 'agent', height: 'compact', ariaLabel: '白纸中央写着终版，句点露出一截朱红色的尾巴',
-    markup: `<style>
-      .stage{min-height:100vh;display:grid;place-items:center;background:#fff;overflow:hidden}
-      .word{position:relative;color:#191919;font-family:"Songti SC",STSong,SimSun,serif;font-size:clamp(84px,13vw,174px);font-weight:900;letter-spacing:-.08em;line-height:1;white-space:nowrap}
-      .period{position:relative;display:inline-block;margin-left:.05em;letter-spacing:0}
-      .period::after{content:"";position:absolute;right:-.015em;bottom:-.09em;width:.047em;height:.18em;background:#b53e35;transform:rotate(-12deg);border-radius:1px}
-      @media(max-width:600px){.word{font-size:clamp(72px,21vw,118px)}}
-    </style><main class="stage"><div class="word">终版<span class="period">.</span></div></main>`,
+  visual: {
+    type: 'image', source: 'agent', placement: 'centerpiece',
+    imageUrl: '/demo/daily-blank-sweets.png',
+    alt: '饱和蓝色的静物场景中，三把透明玻璃勺错落倾斜；琥珀色糖浆、红棕色糖粒和金色蜜丝形成三种不同的流动。',
   },
   evidenceExternalKeys: ['sample:1:1'],
   tags: ['有意思'],
@@ -36,7 +31,24 @@ export const sampleDailyBlank: DailyBlankSnapshot = {
 
 export const sampleDailyBlankDrawer: DailyBlankSnapshot[] = [
   {
-    id: 'sample-blank-rain', date: today(1), state: 'artifact', title: '一滴比一场雨贵',
+    id: 'sample-blank-period', date: today(1), state: 'artifact', title: '句点暂留',
+    content: '改到最后，句点先落在纸上。下一次打开，还可以从这里接着写。',
+    whyNow: '虚构的开放日筹备讨论已经有了可试行的版本，仍保留后续修改空间。',
+    conversationStarter: '沿着“句点暂留”继续聊：哪些事可以先交付一版，哪些决定还要留待核对？请只使用演示资料。',
+    canvas: {
+      type: 'html', source: 'agent', height: 'compact', ariaLabel: '白纸中央写着终版，句点露出一截朱红色的尾巴',
+      markup: `<style>
+        .stage{min-height:100vh;display:grid;place-items:center;background:#fff;overflow:hidden}
+        .word{position:relative;color:#191919;font-family:"Songti SC",STSong,SimSun,serif;font-size:clamp(84px,13vw,174px);font-weight:900;letter-spacing:-.08em;line-height:1;white-space:nowrap}
+        .period{position:relative;display:inline-block;margin-left:.05em;letter-spacing:0}
+        .period::after{content:"";position:absolute;right:-.015em;bottom:-.09em;width:.047em;height:.18em;background:#b53e35;transform:rotate(-12deg);border-radius:1px}
+        @media(max-width:600px){.word{font-size:clamp(72px,21vw,118px)}}
+      </style><main class="stage"><div class="word">终版<span class="period">.</span></div></main>`,
+    },
+    evidenceExternalKeys: ['sample:1:1'], tags: ['有意思'], savedAt: generatedAt, generatedAt, expiresAt,
+  },
+  {
+    id: 'sample-blank-rain', date: today(3), state: 'artifact', title: '一滴比一场雨贵',
     content: '公共花园的试种先从一小块土开始。第一滴水落下去，才知道接下来该怎么照看。',
     whyNow: '虚构的公共花园项目正在讨论先试哪一小块地。',
     conversationStarter: '继续聊这个虚构公共花园的试种：先做什么，才能学到下一步真正需要的信息？',
@@ -54,18 +66,14 @@ export const sampleDailyBlankDrawer: DailyBlankSnapshot[] = [
     evidenceExternalKeys: ['sample:2:0'], tags: ['值得追问', '有意思'], savedAt: generatedAt, generatedAt, expiresAt,
   },
   {
-    id: 'sample-blank-mirrors', date: today(2), state: 'artifact', title: '镜子各忙各的',
-    content: '同一张桌上的三面镜子，各自照见不同的一角。把它们并排，才看得见整张桌子。',
+    id: 'sample-blank-mirrors', date: today(3), state: 'artifact', title: '镜子各忙各的',
+    content: '同一只壶，在三面镜子里各忙各的。也许不同视角可以同时成立。',
     whyNow: '虚构的图书角项目在两次讨论中，分别谈到了书目、场地和借阅方式。',
     conversationStarter: '继续聊“镜子各忙各的”：这三种视角怎样放在一起，才不会丢掉任何一个人的关切？',
-    canvas: {
-      type: 'html', source: 'agent', height: 'compact', ariaLabel: '三面错落的镜子分别映出一本书、一个座位和一扇窗',
-      markup: `<style>
-        .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,44px);padding:24px;background:linear-gradient(180deg,#a2bed2 0 48%,#dfb49a 48% 100%);overflow:hidden}
-        .mirror{width:clamp(90px,17vw,230px);height:clamp(150px,28vw,340px);display:grid;place-items:center;border:8px solid #755f50;box-shadow:13px 16px 20px #54443755;background:linear-gradient(145deg,#d8e6e8aa,#647d82aa);transform:rotate(-5deg);font-family:"Songti SC",STSong,serif;font-size:clamp(34px,7vw,92px);color:#f7f5ee}
-        .mirror:nth-child(2){transform:translateY(-26px) rotate(3deg);background:linear-gradient(145deg,#afc6bb,#526e64)}
-        .mirror:nth-child(3){transform:translateY(14px) rotate(7deg);background:linear-gradient(145deg,#d9c6b1,#7f8e94)}
-      </style><main class="stage"><div class="mirror">书</div><div class="mirror">座</div><div class="mirror">窗</div></main>`,
+    visual: {
+      type: 'image', source: 'agent', placement: 'centerpiece',
+      imageUrl: '/demo/daily-blank-mirrors.png',
+      alt: '杏橙色桌面上的白瓷茶壶，后方三面镜子里，同一只壶分别倒茶、接雨、晾着壶盖。',
     },
     evidenceExternalKeys: ['sample:0:0', 'sample:0:1'], tags: ['值得追问'], savedAt: generatedAt, generatedAt, expiresAt,
   },
