@@ -96,7 +96,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 def cloud(config: dict[str, Any], route: str, body: dict[str, Any], *, pairing: bool = False) -> dict[str, Any]:
     base = api_base(str(config.get("api_base", "")))
     if not pairing and not config.get("device_token"):
-        raise ConnectionError("pairing_required", "设备尚未配对，请在会里重新下载个人连接包。")
+        raise ConnectionError("pairing_required", "设备尚未与目标后端配对，请由你的 Agent 核对该后端的配对方式。")
     headers = {"Content-Type": "application/json", "User-Agent": "Huili-Connector/" + VERSION}
     if config.get("api_key"):
         headers["Authorization"] = "Bearer " + str(config["api_key"])
@@ -113,7 +113,7 @@ def cloud(config: dict[str, Any], route: str, body: dict[str, Any], *, pairing: 
         if exc.code == 403:
             raise ConnectionError("gateway_denied", "应用接口凭证缺失、无效或未获此接口权限，请联系应用管理员。") from exc
         if exc.code == 401:
-            raise ConnectionError("pairing_rejected", "设备凭证或配对码已失效，请在会里重新连接。") from exc
+            raise ConnectionError("pairing_rejected", "设备凭证或配对码已失效，请核对目标后端并重新配对。") from exc
         raise ConnectionError("cloud_http_error", f"会里接口返回 HTTP {exc.code}，请稍后重试。") from exc
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         raise ConnectionError("cloud_unreachable", "暂时无法连接会里，请检查网络与应用地址。") from exc
@@ -160,14 +160,14 @@ def identity(config: dict[str, Any], *, require_bound: bool = True) -> dict[str,
     if require_bound and not expected:
         raise ConnectionError("identity_not_bound", "尚未核对飞书账号，请重新核对连接配置。")
     if expected and expected != user["openId"]:
-        raise ConnectionError("identity_changed", "飞书 CLI 已切换账号，请切回安装时的账号或为新账号重新连接。")
+        raise ConnectionError("identity_changed", "飞书 CLI 已切换账号，请切回配对时的账号或为新账号重新连接。")
     return {"name": user.get("userName", ""), "open_id": user["openId"]}
 
 
 def diagnosis(config: dict[str, Any]) -> dict[str, Any]:
     checks: list[dict[str, Any]] = [{"name": "运行环境", "ok": sys.version_info >= (3, 10)}]
     if config.get("_load_error") or not config.get("api_base"):
-        checks.append({"name": "连接配置", "ok": False, "code": "configuration_missing", "next": "请先运行连接包中的安装入口。"})
+        checks.append({"name": "连接配置", "ok": False, "code": "configuration_missing", "next": "请由你的 Agent 核对自有后端地址并运行可选连接器的 setup。"})
         return {"ok": False, "version": VERSION, "mode": "on_demand", "background_running": False, "checks": checks}
     try:
         user = identity(config)
@@ -365,9 +365,9 @@ def export_client(config_file: pathlib.Path, agent: str) -> pathlib.Path:
 def setup(args: argparse.Namespace) -> dict[str, Any]:
     invitation_path = args.connection or ROOT / "connection.json"
     invitation = load_json(invitation_path) if invitation_path.is_file() else {}
-    base = api_base(args.api_base or invitation.get("api_base") or input("粘贴会里应用地址：").strip())
+    base = api_base(args.api_base or invitation.get("api_base") or input("粘贴你的目标后端地址：").strip())
     if invitation.get("api_base") and api_base(str(invitation["api_base"])) != base:
-        raise ConnectionError("invitation_application_mismatch", "这个连接包属于另一个会里应用，请下载目标应用的个人连接包。")
+        raise ConnectionError("invitation_application_mismatch", "配对配置指向另一个应用，请核对目标后端地址。")
     target = (args.config or config_path(base)).expanduser().resolve()
     agent = args.agent or invitation.get("agent") or "other"
     if agent not in PROVIDERS:
@@ -393,11 +393,11 @@ def setup(args: argparse.Namespace) -> dict[str, Any]:
             try:
                 expired = dt.datetime.fromisoformat(expiry.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc)
             except (ValueError, TypeError) as exc:
-                raise ConnectionError("invitation_invalid", "连接包的有效期不正确，请重新下载。") from exc
+                raise ConnectionError("invitation_invalid", "配对邀请的有效期不正确，请核对目标后端提供的配置。") from exc
             if expired:
-                raise ConnectionError("invitation_expired", "连接包已过期，请回到会里重新下载。")
+                raise ConnectionError("invitation_expired", "配对邀请已过期，请从目标后端取得新的邀请。")
         if not key and not config.get("api_key") and urllib.parse.urlsplit(base).hostname not in ("localhost", "127.0.0.1", "::1"):
-            raise ConnectionError("gateway_key_required", "连接包尚未包含应用接口凭证。请由应用管理员启用个人连接包；不要使用作者的私有配置。")
+            raise ConnectionError("gateway_key_required", "目标后端接口凭证缺失，请核对自有后端配置；不要使用作者的私有配置。")
         if key:
             config["api_key"] = key
     binary = args.lark_bin or existing.get("lark_bin") or shutil.which("lark-cli")
@@ -415,19 +415,19 @@ def setup(args: argparse.Namespace) -> dict[str, Any]:
         argv = [config["lark_bin"]]
         if config["lark_profile"]:
             argv.extend(["--profile", config["lark_profile"]])
-        return {"ok": False, "code": "lark_login_required", "message": "请在自己的 Agent 中完成飞书授权，再运行一次安装入口。",
+        return {"ok": False, "code": "lark_login_required", "message": "请在自己的 Agent 中完成飞书授权，再运行一次可选连接器的 setup。",
                 "authorization_command": argv + ["auth", "login", "--scope", " ".join(READ_SCOPES), "--no-wait", "--json"]}
     config["lark_open_id"] = user["open_id"]
     if not args.yes and not existing.get("lark_open_id"):
         if not sys.stdin.isatty():
             return {"ok": False, "code": "account_confirmation_required", "account": user["name"],
                     "api_base": base, "agent": agent,
-                    "message": "请核对这是本人飞书账号和目标会里应用，确认后用 --yes 重新运行安装入口。"}
+                    "message": "请核对这是本人飞书账号和目标后端，确认后用 --yes 重新运行 setup。"}
         print(f"将 {user['name']} 的飞书账号连接到 {base}，供 {agent} 在对话中调用。", file=sys.stderr)
         if input("确认这是你本人的账号？[Y/n] ").strip().lower() not in ("", "y", "yes"):
             raise ConnectionError("cancelled", "已取消连接。")
     if not config.get("device_token"):
-        code = str(args.pairing_code or invitation.get("pairing_code") or input("粘贴网页中的一次性配对码：")).strip().upper()
+        code = str(args.pairing_code or invitation.get("pairing_code") or input("粘贴目标后端的一次性配对码：")).strip().upper()
         if not re.fullmatch(r"[A-Z0-9]{4}-[A-Z0-9]{4}", code):
             raise ConnectionError("invalid_pairing_code", "配对码应为 XXXX-XXXX。")
         paired = cloud(config, "/openapi/v1/devices/pair", {"pairingCode": code,
