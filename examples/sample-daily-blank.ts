@@ -7,21 +7,35 @@ const today = (daysAgo = 0) => {
 const generatedAt = new Date().toISOString();
 const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-// The two PNG artworks come from the author's personal version, with metadata
-// removed. All surrounding text and meeting evidence are fictional demo copy.
+// The mirror PNG and the period's visual interaction come from the author's
+// personal version. The image metadata and all real meeting copy are removed.
 export const sampleDailyBlank: DailyBlankSnapshot = {
-  id: 'sample-blank-sweets',
+  id: 'sample-blank-period',
   date: today(),
   state: 'artifact',
-  title: '甜有三种走法',
-  content: '同一种甜，可以慢慢流下、凝成颗粒，也可以拉出一根细线。',
-  whyNow: '虚构的社区市集讨论了同一主题的不同呈现方式，这件留白把它变成一幅静物。',
-  conversationStarter: '沿着“甜有三种走法”继续聊：同一主题还可以有哪些呈现方式？请只使用演示资料。',
+  title: '句点暂留',
+  content: '改到最后，句点先落在纸上。下一次打开，还可以从这里接着写。',
+  whyNow: '虚构的开放日筹备讨论已经有了可试行的版本，仍保留后续修改空间。',
+  conversationStarter: '沿着“句点暂留”继续聊：哪些事可以先交付一版，哪些决定还要留待核对？请只使用演示资料。',
   contractVersion: '2026-09-10.open-media',
-  visual: {
-    type: 'image', source: 'agent', placement: 'centerpiece',
-    imageUrl: '/demo/daily-blank-sweets.png',
-    alt: '饱和蓝色的静物场景中，三把透明玻璃勺错落倾斜；琥珀色糖浆、红棕色糖粒和金色蜜丝形成三种不同的流动。',
+  canvas: {
+    type: 'html', source: 'agent', height: 'compact', ariaLabel: '终版后面的句点露出红色尾巴，点开可看到下一句话',
+    markup: `<style>
+      .typesetter-blank{box-sizing:border-box;min-height:280px;width:100%;padding:32px 16px;display:grid;place-items:center;background:#fff;color:#141414;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+      .typesetter-blank *{box-sizing:border-box}
+      .typesetter-blank details{width:max-content;max-width:100%;margin:0 auto}
+      .typesetter-blank summary{display:flex;align-items:center;justify-content:center;list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:3px}
+      .typesetter-blank summary::-webkit-details-marker{display:none}
+      .typesetter-blank summary::marker{content:""}
+      .typesetter-blank summary:focus-visible{outline:2px solid #d83b2c;outline-offset:12px}
+      .typesetter-blank .statement{display:flex;align-items:baseline;flex:none;font-size:clamp(56px,14vw,112px);font-weight:800;letter-spacing:-.065em;line-height:1.15;white-space:nowrap}
+      .typesetter-blank .mark{display:block;flex:none;width:.34em;height:.561em;margin-left:.065em;transform:translateY(.27em);overflow:visible}
+      .typesetter-blank .tail{clip-path:inset(0 0 48% 0);transition:clip-path 180ms ease-out}
+      .typesetter-blank .continuation{display:none;flex:none;margin-left:clamp(12px,2.5vw,24px);font-size:clamp(15px,3vw,23px);font-weight:500;line-height:1.65;letter-spacing:.025em;white-space:nowrap}
+      .typesetter-blank details[open] .tail{clip-path:inset(0 0 0 0)}
+      .typesetter-blank details[open] .continuation{display:block}
+      @media(prefers-reduced-motion:reduce){.typesetter-blank .tail{transition:none}}
+    </style><main class="typesetter-blank"><details><summary aria-label="展开句点后面的话"><span class="statement"><span>终版</span><svg class="mark" viewBox="0 0 40 66" role="img" aria-label="露出红色尾巴的句点"><path class="tail" d="M23 23 C29 36 23 47 10 53" fill="none" stroke="#d83b2c" stroke-width="7" stroke-linecap="round"></path><circle cx="18" cy="19" r="9" fill="#141414"></circle></svg></span><span class="continuation">下一次打开，<br>还可以接着写。</span></summary></details></main>`,
   },
   evidenceExternalKeys: ['sample:1:1'],
   tags: ['有意思'],
@@ -30,23 +44,6 @@ export const sampleDailyBlank: DailyBlankSnapshot = {
 };
 
 export const sampleDailyBlankDrawer: DailyBlankSnapshot[] = [
-  {
-    id: 'sample-blank-period', date: today(1), state: 'artifact', title: '句点暂留',
-    content: '改到最后，句点先落在纸上。下一次打开，还可以从这里接着写。',
-    whyNow: '虚构的开放日筹备讨论已经有了可试行的版本，仍保留后续修改空间。',
-    conversationStarter: '沿着“句点暂留”继续聊：哪些事可以先交付一版，哪些决定还要留待核对？请只使用演示资料。',
-    canvas: {
-      type: 'html', source: 'agent', height: 'compact', ariaLabel: '白纸中央写着终版，句点露出一截朱红色的尾巴',
-      markup: `<style>
-        .stage{min-height:100vh;display:grid;place-items:center;background:#fff;overflow:hidden}
-        .word{position:relative;color:#191919;font-family:"Songti SC",STSong,SimSun,serif;font-size:clamp(84px,13vw,174px);font-weight:900;letter-spacing:-.08em;line-height:1;white-space:nowrap}
-        .period{position:relative;display:inline-block;margin-left:.05em;letter-spacing:0}
-        .period::after{content:"";position:absolute;right:-.015em;bottom:-.09em;width:.047em;height:.18em;background:#b53e35;transform:rotate(-12deg);border-radius:1px}
-        @media(max-width:600px){.word{font-size:clamp(72px,21vw,118px)}}
-      </style><main class="stage"><div class="word">终版<span class="period">.</span></div></main>`,
-    },
-    evidenceExternalKeys: ['sample:1:1'], tags: ['有意思'], savedAt: generatedAt, generatedAt, expiresAt,
-  },
   {
     id: 'sample-blank-rain', date: today(3), state: 'artifact', title: '一滴比一场雨贵',
     content: '公共花园的试种先从一小块土开始。第一滴水落下去，才知道接下来该怎么照看。',
